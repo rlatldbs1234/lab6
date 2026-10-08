@@ -1,10 +1,11 @@
 #pragma once
-#include<iostream>
-
+#include <iostream>
+#include <string>
 namespace KimSiyun2649069
 {
     class student
     {
+        std::string name {};
         int id{};
         int score{};
         char grade{};
@@ -30,12 +31,14 @@ namespace KimSiyun2649069
             }
         }
         public:
-        student(int d = 2649069, int s = 0, char g = 'F')
-            :id{d}, score{s}, grade{g}
+        student(const std::string n = "no name yet", int d = 2649069, int s = 0, char g = 'F')
+            :name{n}, id{d}, score{s}, grade{g}
         {
             testId(); testScore(); testGrade();
         }
         void input(){
+            std::cout << "Enter name: ";
+            std::getline(std::cin >> std::ws, name);//std::cin >> name;
             std::cout << "Enter id: ";
             std::cin >> id; testId();
             std::cout << "Enter score: ";
@@ -45,6 +48,8 @@ namespace KimSiyun2649069
         }
         friend std::istream& operator>>(std::istream& is, student& s)
         {//input: std::cin --> is
+            std::cout << "Enter name: ";
+            std::getline(is >> std::ws, s.name);//is >> name;
             std::cout << "Enter id: ";
             is >> s.id; s.testId();
             std:: cout << "Enter score: ";
@@ -53,29 +58,31 @@ namespace KimSiyun2649069
             is >> s.grade; s.testGrade();
             return is;
         }
+        void setName(const std::string& n){name = n;}
         void setId(int d){id = d; testId();}
         void setScore(int s){score = s; testScore();}
         void setGrade(char g){grade = g; testGrade();}
-        void print() const{
-            std::cout << id << ", " << score << ", " << grade << "\n";
+        void print() const
+        {
+            std::cout << name << "(" << id << "): " << score << " (" << grade << ")\n";
         }
         friend std::ostream& operator<<(std::ostream& os, const student& s)
         {//print(): std::cout --> os
-            os << s.id << ", " << s.score << ", " << s.grade << "\n";
+            os << s.name << "(" << s.id << "): " << s.score << " (" << s.grade << ")\n";
             return os;
         }
-        
+        const std::string& getName() const {return name;}
         int getId() const {return id;}
         int getScore() const {return score;}
         char getGrade() const {return grade;}
         student operator++()
         {
-            return student{id, ++score, grade};
+            return student{name, id, ++score, grade};
         }
 
         student operator++(int)//{return student{id, score++, grade};}
         {
-            student temp{id, score, grade};
+            student temp{name, id, score, grade};
             score++;
             return temp;
         }
